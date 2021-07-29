@@ -1,36 +1,76 @@
-# https://www.acmicpc.net/problem/1806
-
+# https://www.acmicpc.net/problem/2473
 import sys
+from bisect import bisect_right
+
+sys.stdin.readline()    # 안씀
+solutions = sorted(map(int, sys.stdin.readline().split()))
+negative_idx = bisect_right(solutions, -1) - 1  # 음의 용액 인덱스
+positive_idx = negative_idx + 1
+
+
+def same_all(start_idx, end_idx):
+    sum_value = abs(sum(solutions[start_idx:end_idx + 1]))
+
+    if sum_value < answer[3]:
+        for i in range(3):
+            answer[i] = solutions[end_idx + -1 * i]
+
+        answer[3] = sum_value
+
 
 if __name__ == '__main__':
-    n_number, target = map(int, sys.stdin.readline().split())
-    numbers = tuple(map(int, sys.stdin.readline().split()))
-    answer = 100001 #최악의 경우
-    pointer1 = pointer2 = 0
-    num = numbers[0]    #구간 합 저장
+    answer = [1000000000, 1000000000, 1000000001, 3000000001]
 
-    while True:
-        # 구간 합이 타겟보다 큰 경우
-        if num >= target:
-            # 구간의 길이 최소값 갱신
-            answer = min(answer, pointer2 - pointer1 + 1)
-            # 구간을 앞에서 한 칸 줄임
-            num -= numbers[pointer1]
-            pointer1 += 1
-            if pointer1 == n_number:
-                break
-            #구간이 한 칸 짜리 였던 경우(앞 포인터가 뒷 포인터를 넘어간 경우)
-            if pointer1 == pointer2 + 1:
-                pointer2 = pointer1
-                num = numbers[pointer2]
-        else:
-            #구간 합이 타겟을 만족할 때 까지 뒤로 한 칸 씩 늘림
-            pointer2 += 1
-            if pointer2 == n_number:
-                break
-            num += numbers[pointer2]
+    # 음수 용액 3개
+    if negative_idx - 2 >= 0:
+        same_all(negative_idx - 2, negative_idx)
 
-    if answer == 100001:
-        print(0)
-    else:
-        print(answer)
+    # 양수 용액 3개
+    if positive_idx + 2 < len(solutions):
+        same_all(positive_idx, positive_idx + 2)
+
+    # 음수 용액 2개 양수 용액 1개
+    if negative_idx - 1 >= 0 and positive_idx < len(solutions):
+        for i in range(positive_idx, len(solutions)):
+            target = solutions[i]
+            # 투포인터
+            start_idx = 0
+            end_idx = negative_idx
+
+            while start_idx < end_idx:
+                clac = abs(solutions[start_idx] + solutions[end_idx] + target)
+
+                if clac < answer[3]:
+                    answer[0] = solutions[start_idx]
+                    answer[1] = solutions[end_idx]
+                    answer[2] = target
+                    answer[3] = clac
+
+                if (solutions[start_idx] + solutions[end_idx]) * -1 <= target:  # -1을 곱한 이유는 절대값을 계산하기 위해서
+                    end_idx -= 1
+                else:
+                    start_idx += 1
+
+    # 음수 용액 1개 양수 용액 2개
+    if negative_idx >= 0 and positive_idx + 1 < len(solutions):
+        for i in range(negative_idx + 1):
+            target = solutions[i]
+            # 투포인터
+            start_idx = positive_idx
+            end_idx = len(solutions) - 1
+
+            while start_idx < end_idx:
+                clac = abs(solutions[start_idx] + solutions[end_idx] + target)
+
+                if clac < answer[3]:
+                    answer[0] = solutions[start_idx]
+                    answer[1] = solutions[end_idx]
+                    answer[2] = target
+                    answer[3] = clac
+
+                if solutions[start_idx] + solutions[end_idx] <= target * -1:    # -1을 곱한 이유는 절대값을 계산하기 위해서
+                    start_idx += 1
+                else:
+                    end_idx -= 1
+
+    print(" ".join(map(str, sorted(answer[:3]))))
