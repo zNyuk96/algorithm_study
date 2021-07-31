@@ -3,7 +3,7 @@
   스터디원 : 김형준 선민기 양진혁 오지원
 
 </br>
-<h3><a href="https://docs.google.com/spreadsheets/d/1enk4ziaIpllC1OXJL1mqEuoNUDGdqES1kDXqCClyDvU/edit#gid=0">스케줄 관리</a></h3>
+<a href="https://docs.google.com/spreadsheets/d/1enk4ziaIpllC1OXJL1mqEuoNUDGdqES1kDXqCClyDvU/edit#gid=0"><h3>스케줄 관리</h3></a>
 
 <h2> 이분탐색 2021-07-26 ~ 2021-08-02 </h2>
 
