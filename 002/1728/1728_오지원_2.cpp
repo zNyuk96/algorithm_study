@@ -10,14 +10,16 @@
 
 long long N;
 std::vector< std::vector<long long> > capture;
-std::priority_queue< std::pair<int, int> > pq;
+std::priority_queue< std::pair<long long, long long> > pq;
 
 bool is_ok(long long ball_speed, long long ball_loc) {
 	long long level = 1;
 	long long n_ball_loc = ball_loc;
 	while (level <= N) {
 		n_ball_loc += ball_speed;
-		if (n_ball_loc != *std::lower_bound(capture[level].begin(), capture[level].end(), n_ball_loc)) return false;
+		auto lower_bound_itr = std::lower_bound(capture[level].begin(), capture[level].end(), n_ball_loc);
+		if (lower_bound_itr == capture[level].end()) return false;
+		if (n_ball_loc != *lower_bound_itr) return false;
 		level++;
 	}
 	return true;
@@ -27,7 +29,6 @@ bool is_ok(long long ball_speed, long long ball_loc) {
 int main() {
 	scanf("%lld", &N);
 	capture.assign(N + 1, std::vector<long long>(N, 0));
-	visited.assign(N + 2, std::vector<bool>(N, 0));
 
 	for (int i = 0; i < N + 1; i++) {
 		for (int j = 0; j < N; j++) {
@@ -42,12 +43,13 @@ int main() {
 			long long ball_speed = capture[1][j] - capture[0][i];
 			if (is_ok(ball_speed, ball_loc)) {
 				pq.emplace(std::make_pair(-1 * ball_loc, ball_speed));
+				break;
 			}
 		}
 	}
 
 	for (int k = 0; k < N; k++) {
-		auto front = pq.front();
+		auto front = pq.top();
 		pq.pop();
 		printf("%lld %lld\n", front.first * -1, front.second);
 	}
