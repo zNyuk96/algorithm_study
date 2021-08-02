@@ -27,8 +27,6 @@ int BSearch(int low, int high){
     int sum = 0;
     int minute = 0;
 
-    if (mid < maximum) return BSearch(mid+1, high);
-
     while(!buf.empty()) buf.pop();
     buf.push(0);
 
