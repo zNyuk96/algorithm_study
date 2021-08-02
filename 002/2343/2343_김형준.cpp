@@ -18,7 +18,6 @@ int M, N;
 int arr[100000];
 int total;
 int maximum = INT32_MIN;
-int minimum = INT32_MAX;
 stack<int> buf;
 
 int BSearch(int low, int high){
@@ -54,7 +53,6 @@ int main(){
         cin >> arr[i];
         total += arr[i];
         if (maximum < arr[i]) maximum = arr[i];
-        if (minimum > arr[i]) minimum = arr[i];
     }
     cout << BSearch(maximum, total);
     return 0;
