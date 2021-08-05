@@ -1,0 +1,53 @@
+#pragma warning (disable : 4996)
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <limits.h>
+#include <math.h>
+
+int N;
+std::vector< std::vector<int> > map;
+int ans = INT_MAX;
+
+void calculate() {
+
+	std::vector<int> permutation(N, 0);
+
+	for (int k = 0; k < N/2; k++) {
+		permutation[k]=1;
+	}
+
+	do {
+		std::vector<int> team_a, team_b;
+		for (int k = 0; k < N; k++) {
+			if (permutation[k]) team_a.emplace_back(k);
+			else team_b.emplace_back(k);
+		}
+
+		int score_a = 0, score_b = 0;
+
+		for (int i = 0; i < N / 2; i++) {
+			for (int j = 0; j < N / 2; j++) {
+				if (i == j) continue;
+				score_a += map[team_a[i]][team_a[j]];
+				score_b += map[team_b[i]][team_b[j]];
+			}
+		}
+
+		ans = std::min(ans, abs(score_a - score_b));
+		if (ans == 0) break;
+		
+	} while (std::prev_permutation(permutation.begin(), permutation.end()));
+}
+
+int main() {
+	scanf("%d", &N);
+	map.assign(N, std::vector<int>(N, 0));
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) {
+			scanf("%d", &map[i][j]);
+		}
+	}
+	calculate();
+	printf("%d", ans);
+}

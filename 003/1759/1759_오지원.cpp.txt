@@ -1,0 +1,42 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+int lev;
+int len;
+std::vector<char> value;
+std::vector<char> str;
+std::vector<char> vowel = {'a','e','i','o','u'};
+
+void calculate(int level, int index) {
+	if (lev == level) {
+		int count = 0;
+		for (int k = 0; k < vowel.size(); k++) {
+			count += std::count(str.begin(), str.end(), vowel[k]);
+		}
+		if (count > 0 && count <= level - 2) {
+			for (int k = 0; k < str.size(); k++) {
+				printf("%1c", str[k]);
+			}
+			printf("\n");
+		}
+		return;
+	}
+
+	for (int k = index; k < value.size(); k++) {
+		str[level] = value[k];
+		calculate(level + 1, k + 1);
+	}
+}
+
+int main() {
+	scanf("%d %d", &lev, &len);
+	str.assign(lev, 0);
+	value.assign(len, 0);
+
+	for (int k = 0; k < len; k++) {
+		scanf(" %1c", &value[k]);
+	}
+	std::sort(value.begin(), value.end());
+	calculate(0, 0);
+}
