@@ -6,28 +6,41 @@ using namespace std;
 int rice_cake_count[1000];
 vector<vector<int>> rice_cake(1000);
 int N;
-int path[1000];
+int path[1000][10] = { -1 };
 int success = 0;
-int success_path[1000];
 
-void run(int level)
+int run(int level, int prev)
 {
-	if (success) return;
+	if (success) return 1;
 
 	if (level == N) {
 		success = 1;
-		memcpy(success_path, path, sizeof(int) * 1000);
-		return;
+		return 1;
 	}
 
-	for (int i = 0; i < rice_cake_count[level]; i++)
+	if (level == 0)
 	{
-		int x = rice_cake[level][i];
-		if (level != 0 && x == path[level - 1]) continue;
-		path[level] = x;
-		run(level + 1);
-		path[level] = 0;
+		for (int i = 0; i < rice_cake_count[level]; i++)
+		{
+			int x = rice_cake[level][i];
+			path[0][0] = x;
+			if (run(level + 1, x)) return 1;
+		}
+	} else if (path[level][prev] == -1) {
+		for (int i = 0; i < rice_cake_count[level]; i++)
+		{
+			int x = rice_cake[level][i];
+			if (x == prev) continue;
+			path[level][prev] = x;
+			if (run(level + 1, x)) return 1;
+		}
 	}
+	else
+	{
+		run(level + 1, path[level][prev]); 
+	}
+
+	return 0;
 }
 
 int main()
@@ -48,14 +61,20 @@ int main()
 		}
 	}
 	
-	run(0);
+	memset(path, -1, sizeof(int) * 1000 * 10);
+	
+	run(0, -1);
 
 	if (success)
-		for (int i = 0; i < 1000; i++)
+	{
+		int prev = 0;
+
+		for (int i = 0; i < N; i++)
 		{
-			if (!success_path[i]) break;
-			cout << success_path[i] << "\n";
+			cout << path[i][prev] << "\n";
+			prev = path[i][prev];
 		}
+	}
 	else
 		cout << -1 << "\n";
 
