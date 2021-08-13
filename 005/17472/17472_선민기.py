@@ -40,9 +40,6 @@ if __name__ == '__main__':
 
             visited[row][col] = True
 
-    for e in group:
-        print(e)
-
     ''' 간선 만들기 '''
     edge = [dict() for _ in range(group_cnt)]   # 간선 저장
 
@@ -55,7 +52,7 @@ if __name__ == '__main__':
             else:
                 # 다른 섬을 만난 경우
                 if group[row][col] != 0:
-                    if group[row][prev_idx] != 0:
+                    if group[row][prev_idx] != 0 and col - prev_idx - 1 > 1:
                         edge[group[row][prev_idx] - 1][group[row][col] - 1] = min(edge[group[row][prev_idx] - 1].get(group[row][col] - 1, 100), col - prev_idx - 1)
                         edge[group[row][col] - 1][group[row][prev_idx] - 1] = min(edge[group[row][col] - 1].get(group[row][prev_idx] - 1, 100), col - prev_idx - 1)
                     prev_idx = col
@@ -76,11 +73,10 @@ if __name__ == '__main__':
                             edge[group[row][col] - 1][group[prev_idx][col] - 1] = min(edge[group[row][col] - 1].get(group[prev_idx][col] - 1, 100), row - prev_idx - 1)
                     prev_idx = row
 
-    print(edge)
-
     ''' 프림 알고리즘 '''
     edge_cnt = group_cnt - 1
     edge_visited = [[False] * group_cnt for _ in range(group_cnt)]   # 간선 방문여부
+    visited_island = [False] * group_cnt    # 방문한 섬 체크
     queue = PriorityQueue()
 
     # 1번 그룹이랑 붙어있는 애들 다 큐에 넣음
@@ -91,16 +87,19 @@ if __name__ == '__main__':
     while not queue.empty():
         cur_cost, cur_src, cur_dst = queue.get()
 
+        if visited_island[cur_src] and visited_island[cur_dst]:
+            continue
+
         answer += cur_cost
         edge_cnt -= 1
-        print(cur_cost)
+        visited_island[cur_src] = visited_island[cur_dst] = True
 
         if edge_cnt == 0:
             break
         
         # 목적지와 연결된 간선 추가
         for neigh in edge[cur_dst].keys():
-            if not edge_visited[cur_dst][neigh]:
+            if not edge_visited[cur_dst][neigh] and not visited_island[neigh]:
                 queue.put((edge[cur_dst][neigh], cur_dst, neigh))
                 edge_visited[cur_dst][neigh] = edge_visited[neigh][cur_dst] = True
 
