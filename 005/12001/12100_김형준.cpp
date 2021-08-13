@@ -68,7 +68,7 @@ void run(int level) {
 		// 맵 복구
 		for (int y = 0; y < N; y++)
 			for (int x = 0; x < N; x++)
-				map[j][k] = prev_map[j][k];
+				map[y][x] = prev_map[y][x];
 	}
 }
 int main() {
