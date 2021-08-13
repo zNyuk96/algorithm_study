@@ -5,7 +5,8 @@
 using namespace std;
 
 int main() {
-	int n, answer = 0;
+	int n;
+	long long answer = 0;
 	vector<int> member;
 	int diff, high, low;
 
