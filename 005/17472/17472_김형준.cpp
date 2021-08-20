@@ -46,8 +46,6 @@ int main() {
 		for (int j = 0; j < M; j++)
 			cin >> map[i][j];
 
-	int country_idx = 'A';
-
 	const int dx[] = { 0, -1, 0, 1 };
 	const int dy[] = { 1, 0, -1, 0 };
 

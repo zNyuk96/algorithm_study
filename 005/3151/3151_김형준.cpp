@@ -7,7 +7,7 @@ using namespace std;
 int N;
 vector<int> vec;
 vector<tuple<int, int, int>> result;
-int answer;
+long long answer;
 
 // 27%에서 틀림
 // 반례 못찾음
@@ -35,7 +35,7 @@ int main() {
 			const int b = vec[left];
 			const int c = vec[right];
 
-			if (a + b < 0)
+			if (a + b <= 0)
 			{
 				if (a + b + c > 0) right--;
 				else if (a + b + c < 0) left++;
@@ -45,6 +45,7 @@ int main() {
 						answer += (right - left + 1) * (right - left) / 2;
 						/*for (int j = 0; j < (right - left + 1) * (right - left) / 2; j++) 
 							result.push_back({ a, b, c });*/
+
 						break;
 					}
 					else
@@ -63,7 +64,7 @@ int main() {
 				};
 			}
 			else break;
-		}		
+		}
 	}
 
 	for (int i = 0; i < result.size(); i++)
