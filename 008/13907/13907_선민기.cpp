@@ -18,8 +18,8 @@ int main() {
 	cin >> n_city >> n_edge >> times;
 	cin >> src >> dst;
 	edge = vector<map<long, long>>(n_city, map<long, long>());
-	costs = vector<vector<long>>(n_city, vector<long>(n_city, 1300001));	// # costs[i][j], i¹øÂ° µµ½Ã±îÁö jÀÇ °£¼±À¸·Î ¿À´Â ÃÖ¼Òºñ¿ë
-	costs_min = vector<pair<long, long>>(n_city, {n_city, 1300001 });	// # [ÃÖ¼Òºñ¿ëÀÇ °£¼± °³¼ö, ÃÖ¼Ò ºñ¿ë]
+	costs = vector<vector<long>>(n_city, vector<long>(n_city, 1300001));	// # costs[i][j], ië²ˆì§¸ ë„ì‹œê¹Œì§€ jì˜ ê°„ì„ ìœ¼ë¡œ ì˜¤ëŠ” ìµœì†Œë¹„ìš©
+	costs_min = vector<pair<long, long>>(n_city, {n_city, 1300001 });	// # [ìµœì†Œë¹„ìš©ì˜ ê°„ì„  ê°œìˆ˜, ìµœì†Œ ë¹„ìš©]
 
 	for (long i = 0, _src, _dst, _cost; i < n_edge; i++) {
 		scanf("%ld %ld %ld", &_src, &_dst, &_cost);
@@ -35,10 +35,10 @@ int main() {
 		edge[_dst - 1][_src - 1] = min(edge[_dst - 1][_src - 1], _cost);
 	}
 
-	// ´ÙÀÍ½ºÆ®¶ó
+	// ë‹¤ìµìŠ¤íŠ¸ë¼
 	costs[src - 1][0] = 0;
 	costs_min[src - 1] = {0, 0};
-	djik_queue.push({0, 0, src - 1});	// # ºñ¿ë, °£¼± °³¼ö, ÇöÀç ³ëµå
+	djik_queue.push({0, 0, src - 1});	// # ë¹„ìš©, ê°„ì„  ê°œìˆ˜, í˜„ì¬ ë…¸ë“œ
 
 	while (!djik_queue.empty()){
 		cur_cost = get<0>(djik_queue.top());
@@ -47,13 +47,13 @@ int main() {
 
 		djik_queue.pop();
 
-		// # µµ½Ã°¡ n°³ ÀÏ ¶§ °ÅÄ¥ ¼ö ÀÖ´Â °£¼±ÀÇ ÃÖ´ë °³¼ö´Â n - 1°³
+		// # ë„ì‹œê°€ nê°œ ì¼ ë•Œ ê±°ì¹  ìˆ˜ ìˆëŠ” ê°„ì„ ì˜ ìµœëŒ€ ê°œìˆ˜ëŠ” n - 1ê°œ
 		if (edge_cnt + 1 < n_city) {
 			for (map<long, long>::iterator it = edge[cur_node].begin(); it != edge[cur_node].end(); it++) {
-				// # ÃÖ¼Òºñ¿ëÀÇ °£¼±º¸´Ù ¸¹Àº °£¼± ¾²¸é¼­ ºñ¿ëµµ ³ôÀ¸¸é cut
-				// # ÃÖ¼Ò ºñ¿ëÀÇ °£¼±º¸´Ù ÀûÀº °£¼± ¾²´Â °æ¿ì(³ªÁß¿¡ ¼¼±İ ¿À¸£¸é ÃÖ¼Ò ºñ¿ëÀÌ µÉ ¼ö ÀÖÀ½)
+				// # ìµœì†Œë¹„ìš©ì˜ ê°„ì„ ë³´ë‹¤ ë§ì€ ê°„ì„  ì“°ë©´ì„œ ë¹„ìš©ë„ ë†’ìœ¼ë©´ cut
+				// # ìµœì†Œ ë¹„ìš©ì˜ ê°„ì„ ë³´ë‹¤ ì ì€ ê°„ì„  ì“°ëŠ” ê²½ìš°(ë‚˜ì¤‘ì— ì„¸ê¸ˆ ì˜¤ë¥´ë©´ ìµœì†Œ ë¹„ìš©ì´ ë  ìˆ˜ ìˆìŒ)
 				if (costs_min[it->first].first > edge_cnt + 1) {
-					// # ÃÖ¼Ò ºñ¿ë °»½ÅÀÌ °¡´ÉÇÑ °æ¿ì °»½Å
+					// # ìµœì†Œ ë¹„ìš© ê°±ì‹ ì´ ê°€ëŠ¥í•œ ê²½ìš° ê°±ì‹ 
 					if (costs_min[it->first].second > cur_cost + it->second) {
 						costs_min[it->first].first = edge_cnt + 1;
 						costs_min[it->first].second = cur_cost + it->second;
@@ -63,7 +63,7 @@ int main() {
 						djik_queue.push({ costs[it->first][edge_cnt + 1], edge_cnt + 1, it->first});
 					}
 				}
-				// # ÃÖ¼Ò ºñ¿ëÀÎ °æ¿ì °»½Å
+				// # ìµœì†Œ ë¹„ìš©ì¸ ê²½ìš° ê°±ì‹ 
 				else if(costs_min[it->first].second > cur_cost + it->second){
 					costs_min[it->first].first = edge_cnt + 1;
 					costs_min[it->first].second = cur_cost + it->second;
@@ -77,7 +77,7 @@ int main() {
 		}
 	}
 
-	// # Ãâ·Â
+	// # ì¶œë ¥
 	cout << *min_element(costs[dst - 1].begin(), costs[dst - 1].end()) << endl;
 
 	for (long i = 0, time; i < times; i++) {
