@@ -22,8 +22,8 @@ int main() {
 		adj[a].push_back(b);
 	}
 
-	priority_queue<pair<int,int>> q;
-	q.push(make_pair(0, 0));
+	priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> q;
+	q.push( {0, 0});
 	path[0].push(0);
 
 	while (!q.empty())
@@ -40,13 +40,13 @@ int main() {
 			if (path[next].size() < K)
 			{
 				path[next].push(cost);
-				q.push(make_pair(next, cost));
+				q.push({next, cost});
 			}
 			else if (path[next].top() > cost)
 			{
 				path[next].pop();
 				path[next].push(cost);
-				q.push(make_pair(next, cost));
+				q.push({next, cost});
 			}
 		}
 	}
