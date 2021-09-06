@@ -19,7 +19,7 @@ int main() {
 	cin >> src >> dst;
 	edge = vector<map<long, long>>(n_city, map<long, long>());
 	costs = vector<vector<long>>(n_city, vector<long>(n_city, 1300001));	// # costs[i][j], i번째 도시까지 j의 간선으로 오는 최소비용
-	costs_min = vector<pair<long, long>>(n_city, {n_city, 1300001 });	// # [최소비용의 간선 개수, 최소 비용]
+	costs_min = vector<pair<long, long>>(n_city, { n_city, 1300001 });	// # [최소비용의 간선 개수, 최소 비용]
 
 	for (long i = 0, _src, _dst, _cost; i < n_edge; i++) {
 		scanf("%ld %ld %ld", &_src, &_dst, &_cost);
@@ -37,10 +37,10 @@ int main() {
 
 	// 다익스트라
 	costs[src - 1][0] = 0;
-	costs_min[src - 1] = {0, 0};
-	djik_queue.push({0, 0, src - 1});	// # 비용, 간선 개수, 현재 노드
+	costs_min[src - 1] = { 0, 0 };
+	djik_queue.push({ 0, 0, src - 1 });	// # 비용, 간선 개수, 현재 노드
 
-	while (!djik_queue.empty()){
+	while (!djik_queue.empty()) {
 		cur_cost = get<0>(djik_queue.top());
 		edge_cnt = get<1>(djik_queue.top());
 		cur_node = get<2>(djik_queue.top());
@@ -60,11 +60,11 @@ int main() {
 					}
 					if (cur_cost + it->second < costs[it->first][edge_cnt + 1]) {
 						costs[it->first][edge_cnt + 1] = cur_cost + it->second;
-						djik_queue.push({ costs[it->first][edge_cnt + 1], edge_cnt + 1, it->first});
+						djik_queue.push({ costs[it->first][edge_cnt + 1], edge_cnt + 1, it->first });
 					}
 				}
 				// # 최소 비용인 경우 갱신
-				else if(costs_min[it->first].second > cur_cost + it->second){
+				else if (costs_min[it->first].second > cur_cost + it->second) {
 					costs_min[it->first].first = edge_cnt + 1;
 					costs_min[it->first].second = cur_cost + it->second;
 
